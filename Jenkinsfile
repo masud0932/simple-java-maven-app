@@ -1,44 +1,39 @@
 pipeline {
-    agent any
-    
+    agent none  // Define agents per stage
+
     tools {
-      maven 'mymaven'
+        maven 'mymaven'
     }
-
-    parameters {
-      choice choices: ['dev', 'prod'], name: 'select_environment'
- }
-
 
     stages {
         stage('Checkout Code') {
-            agent { label 'Built-In Node' }  // Runs on Master
+            agent { label 'Built-In Node' }  // Run on Master
             steps {
-                echo "Checking out code on master node..."
+                echo "Checking out code on Master..."
                 checkout scm
             }
         }
 
-        stage('Build on Slave') {
-            agent { label 'DevServer' }  // Runs on a specific slave
+        stage('Build on Dev Server') {
+            agent { label 'DevServer' }  // Run on Development Slave
             steps {
-                echo "Building the project on slave node..."
+                echo "Building project on DevServer..."
                 sh 'mvn clean install'
             }
         }
 
-        stage('Test on Another Slave') {
-            agent { label 'ProdServer' }  // Runs on a different slave
+        stage('Test on Dev Server') {
+            agent { label 'DevServer' }  // Run tests on Development Slave
             steps {
-                echo "Running tests on a dedicated test slave..."
+                echo "Running tests on DevServer..."
                 sh 'mvn test'
             }
         }
 
-        stage('Deploy on Master') {
-            agent { label 'Built-In Node' }  // Runs on Master
+        stage('Deploy on Production Server') {
+            agent { label 'ProdServer' }  // Run on Production Slave
             steps {
-                echo "Deploying application from master..."
+                echo "Deploying application on ProdServer..."
                 sh 'mvn deploy'
             }
         }

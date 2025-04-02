@@ -7,7 +7,7 @@ pipeline {
 
     stages {
         stage('Checkout Code') {
-            agent { label 'Built-In Node' }  // Run on Master
+            agent { label 'master' }  // Run on Master
             steps {
                 echo "Checking out code on Master..."
                 checkout scm

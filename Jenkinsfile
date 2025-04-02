@@ -6,14 +6,6 @@ pipeline {
     }
 
     stages {
-        stage('Checkout Code') {
-            agent { label 'master' }  // Run on Master
-            steps {
-                echo "Checking out code on Master..."
-                checkout scm
-            }
-        }
-
         stage('Build on Dev Server') {
             agent { label 'DevServer' }  // Run on Development Slave
             steps {
